@@ -14,6 +14,7 @@ export interface DendronTreePluginSettings {
   customResolver: boolean;
   customGraph: boolean;
   deleteMethod: string;
+  separator: string;
 }
 
 export const DEFAULT_SETTINGS: DendronTreePluginSettings = {
@@ -28,6 +29,7 @@ export const DEFAULT_SETTINGS: DendronTreePluginSettings = {
   customResolver: false,
   customGraph: false,
   deleteMethod: "moveToTrash",
+  separator: '.'
 };
 
 export class DendronTreeSettingTab extends PluginSettingTab {
@@ -45,6 +47,19 @@ export class DendronTreeSettingTab extends PluginSettingTab {
 
     containerEl.createEl("h2", { text: "Dendron Tree Settting" });
     
+    new Setting(containerEl)
+      .setName('Separator')
+      .setDesc('Default separator to use')
+      .addText((text) =>
+        text
+          .setPlaceholder('.')
+          .setValue(this.plugin.settings.separator)
+          .onChange(async (value) => {
+            this.plugin.settings.separator = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
     new Setting(containerEl)
     .setName("Deletion Method")
     .setDesc(
