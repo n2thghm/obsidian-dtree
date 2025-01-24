@@ -2,6 +2,7 @@ import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import DendronTreePlugin from "./main";
 import { VaultConfig } from "./engine/vault";
 import { AddVaultModal } from "./modal/add-vault";
+import { dendronActivityBarName } from "./icons";
 
 export interface DendronTreePluginSettings {
   /**
@@ -14,6 +15,7 @@ export interface DendronTreePluginSettings {
   customResolver: boolean;
   customGraph: boolean;
   deleteMethod: string;
+  icon: string;
 }
 
 export const DEFAULT_SETTINGS: DendronTreePluginSettings = {
@@ -28,6 +30,7 @@ export const DEFAULT_SETTINGS: DendronTreePluginSettings = {
   customResolver: false,
   customGraph: false,
   deleteMethod: "moveToTrash",
+  icon: dendronActivityBarName
 };
 
 export class DendronTreeSettingTab extends PluginSettingTab {
@@ -44,6 +47,18 @@ export class DendronTreeSettingTab extends PluginSettingTab {
     containerEl.empty();
 
     containerEl.createEl("h2", { text: "Dendron Tree Settting" });
+    
+    new Setting(containerEl)
+      .setName('Icon')
+      .setDesc('Modify the plugin icon.')
+      .addText( (text) => text
+        .setPlaceholder(dendronActivityBarName)
+        .setValue(this.plugin.settings.icon)
+        .onChange(async (value) => {
+          this.plugin.settings.icon = value;
+          await this.plugin.saveSettings();
+        })
+      );
     
     new Setting(containerEl)
     .setName("Deletion Method")
