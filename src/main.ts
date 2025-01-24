@@ -32,8 +32,8 @@ export default class DendronTreePlugin extends Plugin {
     this.addSettingTab(new DendronTreeSettingTab(this.app, this));
 
     this.registerView(VIEW_TYPE_DENDRON, (leaf) => new DendronView(leaf, this));
-
-    this.addRibbonIcon(dendronActivityBarName, "Open Dendron Tree", () => {
+    
+    this.addRibbonIcon(this.settings.icon, "Open Dendron Tree", () => {
       this.activateView();
     });
 
