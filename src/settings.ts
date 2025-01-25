@@ -1,4 +1,4 @@
-import { App, Notice, PluginSettingTab, Setting } from "obsidian";
+import { App, ButtonComponent, Notice, PluginSettingTab, Setting } from "obsidian";
 import DendronTreePlugin from "./main";
 import { VaultConfig } from "./engine/vault";
 import { AddVaultModal } from "./modal/add-vault";
@@ -35,6 +35,7 @@ export const DEFAULT_SETTINGS: DendronTreePluginSettings = {
 
 export class DendronTreeSettingTab extends PluginSettingTab {
   plugin: DendronTreePlugin;
+  iconSetButton: ButtonComponent;
 
   constructor(app: App, plugin: DendronTreePlugin) {
     super(app, plugin);
@@ -59,13 +60,19 @@ export class DendronTreeSettingTab extends PluginSettingTab {
       //     await this.plugin.saveSettings();
       //   })
       // )
-      .addButton( button => button
+      .addExtraButton(button => button
+        .setIcon(this.plugin.settings.icon)
+        .setTooltip(this.plugin.settings.icon)
+      )
+      .addButton( button => {
+        this.iconSetButton = button
+        button
         .setButtonText('Set Icon')
         .onClick(() => attachIconMenu(button, iconId => {
-            saveIconParam(iconId, this.plugin)
+            saveIconParam(iconId, this)
           })
         )
-      )
+      })
       
     
     new Setting(containerEl)
@@ -166,7 +173,25 @@ export class DendronTreeSettingTab extends PluginSettingTab {
   }
 }
 
-function saveIconParam(iconId: string|null, plugin: DendronTreePlugin) {
-  plugin.settings.icon = iconId != null ? iconId : DEFAULT_SETTINGS.icon
-  plugin.saveSettings()
+function saveIconParam(iconId: string|null, settingTab: DendronTreeSettingTab) {
+  settingTab.plugin.settings.icon = iconId != null ? iconId : DEFAULT_SETTINGS.icon
+  settingTab.plugin.saveSettings().then(() => {
+    settingTab.display()
+    updateIconSetButton(settingTab)
+  })
+
+}
+
+function resetIconParam(settingTab: DendronTreeSettingTab) {
+  saveIconParam(DEFAULT_SETTINGS.icon, settingTab)
+}
+
+function updateIconSetButton(settingTab: DendronTreeSettingTab) {
+  if(settingTab.plugin.settings.icon == DEFAULT_SETTINGS.icon) {
+    return;
+  }
+
+  settingTab.iconSetButton
+    .setButtonText('Reset Icon')
+    .onClick(() => resetIconParam(settingTab))
 }
