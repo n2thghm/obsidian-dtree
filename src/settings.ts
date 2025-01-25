@@ -73,6 +73,9 @@ export class DendronTreeSettingTab extends PluginSettingTab {
             saveIconParam(iconId, this)
           })
         )
+        .then( button =>
+          updateIconSetButton(this)
+        )
       })
       
     
