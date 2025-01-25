@@ -61,7 +61,10 @@ export class DendronTreeSettingTab extends PluginSettingTab {
       // )
       .addButton( button => button
         .setButtonText('Set Icon')
-        .onClick(() => attachIconMenu(button))
+        .onClick(() => attachIconMenu(button, iconId => {
+            saveIconParam(iconId, this.plugin)
+          })
+        )
       )
       
     
@@ -161,4 +164,9 @@ export class DendronTreeSettingTab extends PluginSettingTab {
     this.plugin.configureCustomResolver();
     this.plugin.configureCustomGraph();
   }
+}
+
+function saveIconParam(iconId: string|null, plugin: DendronTreePlugin) {
+  plugin.settings.icon = iconId != null ? iconId : DEFAULT_SETTINGS.icon
+  plugin.saveSettings()
 }
