@@ -51,14 +51,18 @@ export class DendronTreeSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName('Icon')
       .setDesc('Modify the plugin icon.')
-      .addText( (text) => text
-        .setPlaceholder(dendronActivityBarName)
-        .setValue(this.plugin.settings.icon)
-        .onChange(async (value) => {
-          this.plugin.settings.icon = value;
-          await this.plugin.saveSettings();
-        })
-      );
+      // .addText( (text) => text
+      //   .setPlaceholder(dendronActivityBarName)
+      //   .setValue(this.plugin.settings.icon)
+      //   .onChange(async (value) => {
+      //     this.plugin.settings.icon = value;
+      //     await this.plugin.saveSettings();
+      //   })
+      // )
+      .addButton( button => button
+        .setButtonText('Set Icon')
+      )
+      
     
     new Setting(containerEl)
     .setName("Deletion Method")
