@@ -3,6 +3,7 @@ import DendronTreePlugin from "./main";
 import { VaultConfig } from "./engine/vault";
 import { AddVaultModal } from "./modal/add-vault";
 import { attachIconMenu, dendronActivityBarName } from "./icons";
+import { VIEW_TYPE_DENDRON } from "./view";
 
 export interface DendronTreePluginSettings {
   /**
@@ -178,6 +179,7 @@ function saveIconParam(iconId: string|null, settingTab: DendronTreeSettingTab) {
   settingTab.plugin.saveSettings().then(() => {
     settingTab.display()
     updateIconSetButton(settingTab)
+    updateViewLeafIcon(settingTab.plugin)
   })
 
 }
@@ -194,4 +196,15 @@ function updateIconSetButton(settingTab: DendronTreeSettingTab) {
   settingTab.iconSetButton
     .setButtonText('Reset Icon')
     .onClick(() => resetIconParam(settingTab))
+}
+
+function updateViewLeafIcon(plugin: DendronTreePlugin) {
+  let leaves = app.workspace.getLeavesOfType(VIEW_TYPE_DENDRON)
+  if( leaves.length == 0) {
+    return;
+  }
+
+  let leaf = leaves[0]
+  leaf.detach()
+  plugin.activateView()
 }
