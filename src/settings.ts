@@ -2,7 +2,7 @@ import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import DendronTreePlugin from "./main";
 import { VaultConfig } from "./engine/vault";
 import { AddVaultModal } from "./modal/add-vault";
-import { dendronActivityBarName } from "./icons";
+import { attachIconMenu, dendronActivityBarName } from "./icons";
 
 export interface DendronTreePluginSettings {
   /**
@@ -61,6 +61,7 @@ export class DendronTreeSettingTab extends PluginSettingTab {
       // )
       .addButton( button => button
         .setButtonText('Set Icon')
+        .onClick(() => attachIconMenu(button))
       )
       
     
