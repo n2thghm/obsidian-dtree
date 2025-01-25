@@ -180,6 +180,7 @@ function saveIconParam(iconId: string|null, settingTab: DendronTreeSettingTab) {
     settingTab.display()
     updateIconSetButton(settingTab)
     updateViewLeafIcon(settingTab.plugin)
+    settingTab.plugin.updateRibbonIcon();
   })
 
 }

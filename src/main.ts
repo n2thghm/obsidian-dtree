@@ -1,4 +1,4 @@
-import { Menu, Plugin, TAbstractFile, TFile, addIcon } from "obsidian";
+import { Menu, Plugin, TAbstractFile, TFile, addIcon, setIcon } from "obsidian";
 import { DendronView, VIEW_TYPE_DENDRON } from "./view";
 import { activeFile, dendronVaultList } from "./store";
 import { LookupModal } from "./modal/lookup";
@@ -10,6 +10,7 @@ import { CustomResolver } from "./custom-resolver";
 import { CustomGraph } from "./custom-graph";
 
 export default class DendronTreePlugin extends Plugin {
+  ribbonIconId: string = 'dtree-ribbon-icon';
   settings: DendronTreePluginSettings;
   workspace: DendronWorkspace = new DendronWorkspace(this.app);
   customResolver?: CustomResolver;
@@ -35,7 +36,7 @@ export default class DendronTreePlugin extends Plugin {
     
     this.addRibbonIcon(this.settings.icon, "Open Dendron Tree", () => {
       this.activateView();
-    });
+    }).setAttribute('id', this.ribbonIconId);
 
     this.app.workspace.onLayoutReady(() => {
       this.onRootFolderChanged();
@@ -200,5 +201,15 @@ export default class DendronTreePlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
+    this.updateRibbonIcon();
+  }
+
+  updateRibbonIcon() {
+    const ribbonIconEl = document.getElementById(this.ribbonIconId)
+    if (!ribbonIconEl) {
+      return;
+    }
+
+    setIcon(ribbonIconEl, this.settings.icon)
   }
 }
